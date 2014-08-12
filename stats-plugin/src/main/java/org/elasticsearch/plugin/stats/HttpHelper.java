@@ -5,7 +5,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -21,7 +21,8 @@ import java.nio.charset.Charset;
  */
 public class HttpHelper {
     public void postString(String url, String data) throws IOException {
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+
         try {
             HttpPost request = new HttpPost(url);
             request.setEntity(new StringEntity(data));
@@ -32,8 +33,7 @@ public class HttpHelper {
     }
 
     public JSONObject getJsonFromUrl(String url) throws IOException {
-        InputStream inputStream = performHttpRequest(url);
-        String response = readContentFromInputStream(inputStream);
+        String response = performHttpRequest(url);
         return new JSONObject(response);
     }
 
@@ -49,14 +49,16 @@ public class HttpHelper {
         return sb.toString();
     }
 
-    private InputStream performHttpRequest(String url) throws IOException {
-        HttpClient httpClient = new DefaultHttpClient();
+    private String performHttpRequest(String url) throws IOException {
+        HttpClient httpClient = HttpClientBuilder.create().build();
 
         try {
             HttpGet request = new HttpGet(url);
             HttpResponse response = httpClient.execute(request);
 
-            return response.getEntity().getContent();
+            InputStream inputStream = response.getEntity().getContent();
+
+            return readContentFromInputStream(inputStream);
         } catch (IOException e) {
             throw e;
         } finally {
