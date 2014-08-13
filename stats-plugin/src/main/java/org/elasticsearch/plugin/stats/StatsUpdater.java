@@ -21,10 +21,14 @@ public class StatsUpdater extends
         logger.info("Starting stats updater");
 
         IndexNameFactory.initSettings(settings);
+        String cronString = settings.get("monitoring.cron.string");
+        if (cronString == null) {
+            cronString = "0 * * * * ?";
+        }
 
         CronTrigger trigger = newTrigger()
                 .withIdentity("trigger1", "group1")
-                .withSchedule(cronSchedule("0 * * * * ?"))
+                .withSchedule(cronSchedule(cronString))
                 .build();
 
         JobDetail job = newJob(StatusUpdateJob.class)
