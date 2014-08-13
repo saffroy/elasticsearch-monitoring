@@ -17,3 +17,7 @@ In elasticsearch.yml:
 monitoring.index.rotation: "none"
 possible values: "yearly", "monthly", "daily", "none"
 
+monitoring.cron.string: "0 * * * * ?"
+* run every minute "0 * * * * ?"
+* run every five seconds "0/5 * * * * ?"
+
