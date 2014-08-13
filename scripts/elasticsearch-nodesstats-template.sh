@@ -5,7 +5,7 @@
 curl -XPUT "http://localhost:9200/_template/nodesstats" -d "
 {
     \"order\" : 0,
-    \"template\": \"nodesstats-*\",
+    \"template\": \"nodesstats*\",
     \"settings\" : {
         \"number_of_shards\" : 3,
         \"number_of_replicas\" : 1
