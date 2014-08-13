@@ -20,6 +20,8 @@ public class StatsUpdater extends
         super(settings);
         logger.info("Starting stats updater");
 
+        IndexNameFactory.initSettings(settings);
+
         CronTrigger trigger = newTrigger()
                 .withIdentity("trigger1", "group1")
                 .withSchedule(cronSchedule("0 * * * * ?"))

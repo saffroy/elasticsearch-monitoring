@@ -8,8 +8,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -38,15 +36,9 @@ public class StatusUpdateJob implements Job {
         return httpHelper.getJsonFromUrl("http://localhost:9200/_nodes/stats?all");
     }
 
-    private String getFormattedDate() {
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        return sdf.format(date);
-    }
-
     private void putStats(JSONObject stats) throws IOException {
 
-        String indexName = "nodesstats-" + getFormattedDate();
+        String indexName = IndexNameFactory.getIndexName();
 
         StringBuilder sb = new StringBuilder();
         if (stats.has("nodes")) {
