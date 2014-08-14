@@ -14,9 +14,10 @@ $ES_PATH/bin/plugin --url file://$PATH_TO_PROJECT_DIR/target/releases/stats-plug
 ##Possible settings:
 ###Index rotation
 In elasticsearch.yml:
-monitoring.index.rotation: "none"
-possible values: "yearly", "monthly", "daily", "none"
+* monitoring.index.rotation: "none"
+* possible values: "yearly", "monthly", "daily", "none"
 
+###Cron frequency
 monitoring.cron.string: "0 * * * * ?"
 * run every minute "0 * * * * ?"
 * run every five seconds "0/5 * * * * ?"
