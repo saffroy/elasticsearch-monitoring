@@ -21,4 +21,4 @@ In elasticsearch.yml:
 monitoring.cron.string: "0 * * * * ?"
 * run every minute "0 * * * * ?"
 * run every five seconds "0/5 * * * * ?"
-
+* more examples: [quartz cron examples](http://www.quartz-scheduler.org/documentation/quartz-1.x/tutorials/crontrigger)
