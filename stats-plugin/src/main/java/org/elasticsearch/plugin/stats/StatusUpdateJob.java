@@ -25,24 +25,22 @@ public class StatusUpdateJob implements Job {
 
         httpHelper = new HttpHelper();
         try {
-            JSONObject stats = getStats();
-            putStats(stats);
+            JSONObject nodesStats = httpHelper.getJsonFromUrl("http://localhost:9200/_nodes/stats?all");
+            JSONObject clusterStats = httpHelper.getJsonFromUrl("http://localhost:9200/_cluster/stats");
+            putStats(nodesStats, clusterStats);
+
         } catch (Exception e) {
             logger.error("Error during getting stats", e);
         }
     }
 
-    private JSONObject getStats() throws IOException {
-        return httpHelper.getJsonFromUrl("http://localhost:9200/_nodes/stats?all");
-    }
-
-    private void putStats(JSONObject stats) throws IOException {
+    private void putStats(JSONObject nodesStats, JSONObject clusterStats) throws IOException {
 
         String indexName = IndexNameFactory.getIndexName();
 
         StringBuilder sb = new StringBuilder();
-        if (stats.has("nodes")) {
-            JSONObject nodes = stats.getJSONObject("nodes");
+        if (nodesStats.has("nodes")) {
+            JSONObject nodes = nodesStats.getJSONObject("nodes");
 
             for (String key : (Set<String>) nodes.keySet()) {
                 JSONObject node_data = nodes.getJSONObject(key);
@@ -63,6 +61,17 @@ public class StatusUpdateJob implements Job {
                 }
             }
         }
+
+        JSONObject clusterData = new JSONObject();
+        clusterData.put("_index", indexName);
+        clusterData.put("_type", "cluster");
+        JSONObject metadata = new JSONObject();
+        metadata.put("index", clusterData);
+        sb.append(metadata);
+        sb.append('\n');
+        sb.append(clusterStats.toString());
+        sb.append('\n');
+
 
         httpHelper.postString("http://localhost:9200/_bulk", sb.toString());
     }
