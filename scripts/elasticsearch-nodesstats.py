@@ -18,7 +18,7 @@ import requests as rq
 #   and the data for a single node will be indexed under different types
 
 stats = rq.get('http://localhost:9200/_nodes/stats?all').json()
-indexName = ("nodesstats-" + time.strftime("%Y.%m.%d"))
+indexName = ("nodesstats-" + time.strftime("%Y.%m.%d", time.gmtime()))
 
 if (stats is not None):
         nodes_data = stats['nodes']
